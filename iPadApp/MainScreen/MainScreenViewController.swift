@@ -11,31 +11,18 @@ class MainScreenViewController: UIViewController, UIPopoverPresentationControlle
     
     lazy var collectionView = MainCollectionView()
     
-//    lazy var logoImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.backgroundColor = .magenta
-//        imageView.image = UIImage(named: "logo")
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        return imageView
-//    }()
+    lazy var logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .clear
+        imageView.image = UIImage(named: "logo")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
     
     lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        //searchBar.tag = 1
-        //searchBar.searchBarStyle = .minimal
         searchBar.placeholder = "Поиск документов"
-
-        //searchBar.backgroundImage = UIColor(patternImage: UIImage()
-       // searchBar.barTintColor = .white
-//        searchBar.tintColor = .clear
-//        searchBar.searchTextField.tintColor = .red
-        searchBar.searchTextField.backgroundColor = UIColor.white
-//        searchBar.searchTextField.isOpaque = false
-//        searchBar.searchTextField.alpha = 1
-//        searchBar.isTranslucent = false
-//        searchBar.isOpaque = true
-        //searchBar.searchTextField.attributedPlaceholder = NSAttributedString.init(string: "Поиск документов",
-//                                                                                  attributes: [NSAttributedString.Key.backgroundColor: UIColor.red])
+        searchBar.searchTextField.backgroundColor = UIColor(named: "white")
         searchBar.layer.cornerRadius = 16
         searchBar.clipsToBounds = true
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +33,7 @@ class MainScreenViewController: UIViewController, UIPopoverPresentationControlle
         let button = UIButton()
         button.setImage(UIImage(named: "iconResolution"), for: .normal)
         button.setTitle("  Дать поручение", for: .normal)
-        button.setTitleColor(UIColor.systemGreen, for: .normal)
+        button.setTitleColor(UIColor(named: "green"), for: .normal)
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -56,7 +43,7 @@ class MainScreenViewController: UIViewController, UIPopoverPresentationControlle
         let button = UIButton()
         button.setImage(UIImage(named: "iconHelp"), for: .normal)
         button.setTitle("  Помощь", for: .normal)
-        button.setTitleColor(UIColor.darkGray, for: .normal)
+        button.setTitleColor(UIColor(named: "black"), for: .normal)
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(onHelpButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +54,7 @@ class MainScreenViewController: UIViewController, UIPopoverPresentationControlle
         let label = UILabel()
         label.text = "Обновлено 5 мин назад"
         label.font = Constants.Font.textExtraSmall
-        label.textColor = Constants.Colors.grey
+        label.textColor = UIColor(named: "grey")
         label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -107,18 +94,20 @@ class MainScreenViewController: UIViewController, UIPopoverPresentationControlle
         let topInset: CGFloat = 54
         let bottomInset: CGFloat = 40
         let buttonSize = CGSize(width: 160, height: 24)
+        let logoSize = CGSize(width: 186, height: 45)
 
         view.addSubview(collectionView)
-        collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: topInset + topInset / 2 + logoSize.height).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: CGFloat(collectionView.rowsInSection * (Int(collectionView.cellSize.height) + Int(collectionView.cellsInset)))).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor,
+                                               constant: -(bottomInset + bottomInset / 2 + buttonSize.height)).isActive = true
         
-//        view.addSubview(logoImageView)
-//        logoImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: rightLeftInset).isActive = true
-//        logoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: topInset).isActive = true
-//        logoImageView.widthAnchor.constraint(equalToConstant: 186).isActive = true
-//        logoImageView.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        view.addSubview(logoImageView)
+        logoImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: rightLeftInset).isActive = true
+        logoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: topInset).isActive = true
+        logoImageView.widthAnchor.constraint(equalToConstant: 186).isActive = true
+        logoImageView.heightAnchor.constraint(equalToConstant: 45).isActive = true
         
         view.addSubview(searchBar)
         searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -rightLeftInset).isActive = true

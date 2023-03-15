@@ -11,14 +11,16 @@ class MainCollectionView: UICollectionView {
     
     private let model = MainScreenModel()
     
-    let itemsOnRow = 3
+    let itemsOnRow: CGFloat = 3
     let rowsInSection = 2
-    let cellSize = CGSize(width: 280, height: 88)
     let cellsInset: CGFloat = 44
+    lazy var cellSize = CGSize(width: (Constants.Sizes.screenWidth - (cellsInset * (itemsOnRow + 1))) / itemsOnRow,
+                               height: 88)
+    
     private lazy var edgeInsets = UIEdgeInsets(top: cellsInset / 2,
-                                  left: cellsInset,
-                                  bottom: cellsInset / 2,
-                                  right: cellsInset)
+                                               left: cellsInset,
+                                               bottom: cellsInset / 2,
+                                               right: cellsInset)
     
     init() {
         let layout = UICollectionViewFlowLayout()
