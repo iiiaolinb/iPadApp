@@ -16,16 +16,16 @@ class MainCollectionViewCell: UICollectionViewCell {
         view.backgroundColor = UIColor(named: "white")
         view.layer.cornerRadius = Constants.Sizes.cornerRadius
         view.clipsToBounds = true
-//        view.layer.shadowColor = UIColor.black.cgColor
-//        view.layer.shadowRadius = 5
-//        view.layer.shadowOpacity = 1
-//        view.layer.masksToBounds = false
         view.translatesAutoresizingMaskIntoConstraints = false
         
+        return view
+    }()
+    
+    lazy var shadows: UIView = {
         var shadows = UIView()
-        shadows.frame = view.frame
-        shadows.clipsToBounds = false
-        view.addSubview(shadows)
+        shadows.clipsToBounds = true
+        shadows.translatesAutoresizingMaskIntoConstraints = false
+        shadows.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: self.contentView.bounds.height)
 
         let shadowPath0 = UIBezierPath(roundedRect: shadows.bounds, cornerRadius: 6)
         let layer0 = CALayer()
@@ -34,8 +34,10 @@ class MainCollectionViewCell: UICollectionViewCell {
         layer0.shadowOpacity = 1
         layer0.shadowRadius = 16
         layer0.shadowOffset = CGSize(width: 0, height: 6)
+        
         layer0.bounds = shadows.bounds
         layer0.position = shadows.center
+        layer0.masksToBounds = false
         shadows.layer.addSublayer(layer0)
 
         let shadowPath1 = UIBezierPath(roundedRect: shadows.bounds, cornerRadius: 6)
@@ -45,8 +47,10 @@ class MainCollectionViewCell: UICollectionViewCell {
         layer1.shadowOpacity = 1
         layer1.shadowRadius = 8
         layer1.shadowOffset = CGSize(width: 0, height: 1)
+        
         layer1.bounds = shadows.bounds
         layer1.position = shadows.center
+        layer1.masksToBounds = false
         shadows.layer.addSublayer(layer1)
 
         let shadowPath2 = UIBezierPath(roundedRect: shadows.bounds, cornerRadius: 6)
@@ -56,8 +60,10 @@ class MainCollectionViewCell: UICollectionViewCell {
         layer2.shadowOpacity = 1
         layer2.shadowRadius = 2
         layer2.shadowOffset = CGSize(width: 0, height: 1)
+        
         layer2.bounds = shadows.bounds
         layer2.position = shadows.center
+        layer2.masksToBounds = false
         shadows.layer.addSublayer(layer2)
 
         let shadowPath3 = UIBezierPath(roundedRect: shadows.bounds, cornerRadius: 6)
@@ -67,14 +73,14 @@ class MainCollectionViewCell: UICollectionViewCell {
         layer3.shadowOpacity = 1
         layer3.shadowRadius = 42
         layer3.shadowOffset = CGSize(width: 0, height: 12)
+        
         layer3.bounds = shadows.bounds
         layer3.position = shadows.center
+        layer3.masksToBounds = false
         shadows.layer.addSublayer(layer3)
         
         shadows.layer.masksToBounds = false
-        view.layer.masksToBounds = false
-        
-        return view
+        return shadows
     }()
     
     lazy var imageView: UIImageView = {
@@ -128,7 +134,8 @@ class MainCollectionViewCell: UICollectionViewCell {
         let badgeSize = CGSize(width: 22, height: 22)
         let imageAndTitleInset: CGFloat = 20
         let mainViewInset: CGFloat = 5
-        //let sizeForItem = Constants.Sizes.screenWidth / 3
+        
+        addSubview(shadows)
         
         addSubview(mainViewForCell)
         mainViewForCell.leadingAnchor.constraint(equalTo: leadingAnchor, constant: mainViewInset).isActive = true
