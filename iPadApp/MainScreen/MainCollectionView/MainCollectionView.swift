@@ -9,7 +9,7 @@ import UIKit
 
 class MainCollectionView: UICollectionView {
     
-    private let model = MainScreenModel()
+    private var model = MainScreenModel()
     
     let itemsOnRow: CGFloat = 3
     let rowsInSection = 2
@@ -31,6 +31,8 @@ class MainCollectionView: UICollectionView {
         
         delegate = self
         dataSource = self
+        dragDelegate = self
+        dropDelegate = self
         register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.cellId)
         
         showsVerticalScrollIndicator = false
@@ -40,14 +42,6 @@ class MainCollectionView: UICollectionView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    private func sizeForItem(in collectionView: UICollectionView) -> CGSize {
-//        let paddingSpace = sectionInsets.left * (itemsOnRow)
-//        let availableWidth = collectionView.frame.width - paddingSpace
-//        let widthPerItem = floor(availableWidth / itemsOnRow)
-//
-//        return CGSize(width: widthPerItem, height: widthPerItem)
-//    }
 }
 
 extension MainCollectionView: UICollectionViewDataSource {
@@ -73,6 +67,10 @@ extension MainCollectionView: UICollectionViewDataSource {
         
         return cell
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+//        return true
+//    }
 }
 
 extension MainCollectionView: UICollectionViewDelegateFlowLayout {
@@ -95,4 +93,52 @@ extension MainCollectionView: UICollectionViewDelegateFlowLayout {
 
 extension MainCollectionView: UICollectionViewDelegate {
     
+}
+
+extension MainCollectionView: UICollectionViewDragDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+
+        let item = model.list[indexPath.row].title
+        let itemProvider = NSItemProvider(object: item as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = item
+
+        return [dragItem]
+    }
+}
+
+extension MainCollectionView: UICollectionViewDropDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+
+        if self.hasActiveDrag {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+        return UICollectionViewDropProposal(operation: .forbidden)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+
+        var destinationIndexPath = IndexPath(row: 0, section: 0)
+
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        } else {
+            let row = collectionView.numberOfItems(inSection: 0)
+            destinationIndexPath = IndexPath(item: row - 1, section: 0)
+        }
+
+        for item in coordinator.items {
+            if let sourceIndexPath = item.sourceIndexPath {
+                collectionView.performBatchUpdates {
+                    let cellInfo = model.list.remove(at: sourceIndexPath.item)
+                    model.list.insert(cellInfo, at: destinationIndexPath.item)
+                    collectionView.deleteItems(at: [sourceIndexPath])
+                    collectionView.insertItems(at: [destinationIndexPath])
+                }
+                coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+            }
+        }
+    }
 }

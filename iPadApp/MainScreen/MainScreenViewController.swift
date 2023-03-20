@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainScreenViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+class MainScreenViewController: UIViewController, UIPopoverPresentationControllerDelegate, UISearchBarDelegate {
     
     lazy var collectionView = MainCollectionView()
     
@@ -87,6 +87,14 @@ class MainScreenViewController: UIViewController, UIPopoverPresentationControlle
         backgroundImage.contentMode = .scaleToFill
         self.view.insertSubview(backgroundImage, at: 0)
     }
+    
+    //MARK: - search bar delegate
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    //MARK: - constraints
 
     private func setupConstraints() {
         

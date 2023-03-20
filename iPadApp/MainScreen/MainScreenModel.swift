@@ -13,7 +13,7 @@ struct MainScreenModel {
         let count: Int
     }
     
-    let list: [Model] = [Model(title: "Первая ячейка", count: 0),
+    var list: [Model] = [Model(title: "Первая ячейка", count: 0),
                          Model(title: "Вторая ячейка", count: 11),
                          Model(title: "Третья ячейка", count: 222),
                          Model(title: "Четвертая ячейка", count: 3),
